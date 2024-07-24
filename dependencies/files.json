@@ -1,6 +1,4 @@
-["dependencies/commands.json", 
-"dependencies/config.json",
-"dependencies/files.json",
+["dependencies/config.json",
 "dependencies/functions.js",
 "package.json",
 "start.bat"]
