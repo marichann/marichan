@@ -18,6 +18,7 @@ const version = "1.0.0";
 // ---- global constantes ----
 const intervals = [];
 const { color, sysConsole, errConsole, okConsole, logConsole } = require("./src/functions/console");
+const { update } = require("./src/functions/github");
 
-logConsole("test")
+update();
 // ---- start ----

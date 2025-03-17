@@ -1,6 +1,8 @@
-const { errConsole, sysConsole, okConsole } = require("./console");
+const { errConsole, sysConsole, okConsole, clearConsole } = require("./console");
 const { colors, white } = require("./../utils/constantes");
 const { spawn } = require("child_process");
+const https = require("https");
+const fs = require("fs");
 
 // ---- get content files ----
 function githubContent(url) {
@@ -61,7 +63,7 @@ function execWithProgress(command) {
 async function update() {
 	const url = "https://github.com/marichann/marichan";
 	const version = "1.0.0"
-	const gitVersion = JSON.parse(await gitFiles("http://raw.githubusercontent.com/marichann/marichan/refs/heads/main/version.json"))
+	const gitVersion = JSON.parse(await githubContent("https://raw.githubusercontent.com/marichann/marichan/refs/heads/main/version.json"))
 	if (!fs.existsSync('.git')) {
 		sysConsole("Updating files.")
 		await cleanDir();
@@ -71,7 +73,6 @@ async function update() {
 			errConsole(`Error cloning: ${e}`);
 		}
 	} else if (version === gitVersion.version && fs.existsSync('./package.json')) {
-		clearLine(1);
 		sysConsole("No update.");
 	}
 	else {
@@ -88,5 +89,6 @@ async function update() {
 
 // ---- export ----
 module.exports = {
-	githubContent
+	githubContent,
+	update
 }
