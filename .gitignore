@@ -1,5 +1,8 @@
 # Dépendances
 node_modules/
 
-# npm install
+# Npm install
 package-lock.json
+
+# Data files
+data/
