@@ -1,6 +1,6 @@
 const fs = require("fs");
 const https = require("https");
-const process = require("child_process");
+const { spawn, exec } = require("child_process");
 const readline = require("readline");
 const path = require("path");
 const os = require("os");
@@ -8,7 +8,7 @@ const util = require("util");
 
 
 // ---- node functions ----
-const execPromise = util.promisify(process.exec);
+const execPromise = util.promisify(exec);
 
 
 // ---- version ----
@@ -41,6 +41,24 @@ class Time {
 
 
 // ---- color ----
+const colors = {
+	red: "\x1b[31m",
+	green: "\x1b[32m",
+	yellow: "\x1b[33m",
+	blue: "\x1b[34m",
+	magenta: "\x1b[35m",
+	cyan: "\x1b[36m",
+	gray: "\x1b[90m",
+	lightRed: "\x1b[91m",
+	lightGreen: "\x1b[92m",
+	lightYellow: "\x1b[93m",
+	lightBlue: "\x1b[94m",
+	lightMagenta: "\x1b[95m",
+	lightCyan: "\x1b[96m"
+};
+
+const white = "\x1b[0m";
+
 function color() {
 	const settings = require("./data/config/settings.json");
 
