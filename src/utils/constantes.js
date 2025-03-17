@@ -36,7 +36,20 @@ const files = [
 		})
 	},
 	{
-		name: "logs"
+		name: "logs/user.log",
+		content: ""
+	},
+	{
+		name: "logs/error.log",
+		content: ""
+	},
+	{
+		name: "storage/backups.json",
+		content: JSON.stringify({})
+	},
+	{
+		name: "storage/users.json",
+		content: JSON.stringify({})
 	}
 ]
 
