@@ -1,0 +1,22 @@
+{
+  "name": "ohayo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marichann/marichan.git"
+  },
+  "author": "mari-chan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marichann/marichan/issues"
+  },
+  "homepage": "https://github.com/marichann/marichan#readme",
+  "description": "",
+  "dependencies": {
+    "node-js": "^1.0.0"
+  }
+}
