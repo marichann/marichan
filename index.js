@@ -69,26 +69,26 @@ function formatedHours() {
 
 function okConsole(text) {
 	process.stdout.write(`[${colors.green}${formatedHours()}${white}] [${colors.green}+${white}] ${text}\n`);
-	if (fs.existsSync(path.join(__dirname, 'data', 'logs', 'console.log')))
-		fs.appendFileSync(path.join(__dirname, 'data', 'logs', 'console.log'), `${formatedHours()} | OK | ${text.replace(/\x1B\[[0-9;]*m/g, "")}\n`);
+	if (fs.existsSync(path.join(__dirname, 'data', 'console.log')))
+		fs.appendFileSync(path.join(__dirname, 'data', 'console.log'), `${formatedHours()} | OK | ${text.replace(/\x1B\[[0-9;]*m/g, "")}\n`);
 }
 
 function sysConsole(text) {
 	process.stdout.write(`[${colors.cyan}${formatedHours()}${white}] [${colors.cyan}*${white}] ${text}\n`);
-	if (fs.existsSync(path.join(__dirname, 'data', 'logs', 'console.log')))
-		fs.appendFileSync(path.join(__dirname, 'data', 'logs', 'console.log'), `${formatedHours()} | SYSTEM | ${text.replace(/\x1B\[[0-9;]*m/g, "")}\n`);
+	if (fs.existsSync(path.join(__dirname, 'data', 'console.log')))
+		fs.appendFileSync(path.join(__dirname, 'data', 'console.log'), `${formatedHours()} | SYSTEM | ${text.replace(/\x1B\[[0-9;]*m/g, "")}\n`);
 }
 
 function errConsole(text) {
 	process.stdout.write(`[${colors.red}${formatedHours()}${white}] [${colors.red}-${white}] ${text}\n`);
-	if (fs.existsSync(path.join(__dirname, 'data', 'logs', 'console.log')))
-		fs.appendFileSync(path.join(__dirname, 'data', 'logs', 'console.log'), `${formatedHours()} | ERROR | ${text.replace(/\x1B\[[0-9;]*m/g, "")}\n`);
+	if (fs.existsSync(path.join(__dirname, 'data', 'console.log')))
+		fs.appendFileSync(path.join(__dirname, 'data', 'console.log'), `${formatedHours()} | ERROR | ${text.replace(/\x1B\[[0-9;]*m/g, "")}\n`);
 }
 
 function logConsole(text) {
 	process.stdout.write(`${text}\n`);
-	if (fs.existsSync(path.join(__dirname, 'data', 'logs', 'console.log')))
-		fs.appendFileSync(path.join(__dirname, 'data', 'logs', 'console.log'), `${formatedHours()} | ${text.replace(/\x1B\[[0-9;]*m/g, "")}\n`);
+	if (fs.existsSync(path.join(__dirname, 'data', 'console.log')))
+		fs.appendFileSync(path.join(__dirname, 'data', 'console.log'), `${formatedHours()} | ${text.replace(/\x1B\[[0-9;]*m/g, "")}\n`);
 }
 
 function clearConsole() {
@@ -119,6 +119,27 @@ function githubContent(url) {
 }
 
 
+// ---- check all files ----
+async function checkFiles() {
+	const paths = [
+		".gitignore",
+		"package.json",
+		"README.md",
+		"src/console.js",
+		"src/constantes.js",
+		"src/utils.js"
+	]
+	for (const file of paths) {
+		try {
+			await fs.access(file);
+		} catch (e) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
 // ---- update files ----
 function cleanDir() {
 	const files = fs.readdirSync(__dirname);
@@ -142,7 +163,7 @@ async function update() {
 		} catch (e) {
 			errConsole(`Error cloning: ${e}`);
 		}
-	} else if (version === gitVersion.version && fs.existsSync('./package.json')) {
+	} else if (version === gitVersion.version && fs.existsSync('./package.json') && checkFiles()) {
 		sysConsole("No update.");
 	}
 	else {

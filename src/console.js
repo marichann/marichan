@@ -1,5 +1,5 @@
 
-const { colors } = require("./../../index");
+const { colors } = require("./../index");
 
 
 // ---- readline ----
