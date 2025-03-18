@@ -120,16 +120,7 @@ function githubContent(url) {
 
 
 // ---- check all files ----
-async function checkFiles() {
-	const paths = [
-		".gitignore",
-		"package.json",
-		"README.md",
-		"src/console.js",
-		"src/constantes.js",
-		"src/utils.js"
-	]
-	
+async function checkFiles(paths) {
 	try {
 		await Promise.all(paths.map(file => fs.promises.access(file)));
 		return true;
@@ -150,7 +141,15 @@ function cleanDir() {
 }
 
 async function update() {
-	const check = await checkFiles();
+	const paths = [
+		".gitignore",
+		"package.json",
+		"README.md",
+		"src/console.js",
+		"src/constantes.js",
+		"src/utils.js"
+	]
+	const check = await checkFiles(paths);
 	const url = "https://github.com/marichann/marichan";
 	const gitVersion = JSON.parse(await githubContent("https://raw.githubusercontent.com/marichann/marichan/refs/heads/main/version.json"))
 	if (!fs.existsSync('.git')) {
@@ -188,5 +187,6 @@ update();
 module.exports = {
 	Time,
 	colors,
-	white
+	white,
+	checkFiles
 }

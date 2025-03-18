@@ -1,4 +1,3 @@
-
 const { colors } = require("./../index");
 
 
