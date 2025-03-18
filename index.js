@@ -131,7 +131,7 @@ async function checkFiles() {
 	]
 	
 	try {
-		await Promise.all(paths.map(file => fs.access(file)));
+		await Promise.all(paths.map(file => fs.promises.access(file)));
 		return true;
 	} catch (e) {
 		return false;
