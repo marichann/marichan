@@ -1,6 +1,6 @@
 const fs = require("fs");
 const https = require("https");
-const { spawn, exec } = require("child_process");
+const { exec } = require("child_process");
 const readline = require("readline");
 const path = require("path");
 const os = require("os");
@@ -58,19 +58,6 @@ const colors = {
 };
 
 const white = "\x1b[0m";
-
-function color() {
-	const settings = require("./data/config/settings.json");
-
-	const random = Object.values(colors)[Math.floor(Math.random() * Object.values(colors).length)];
-
-	if (Object.keys(colors).map(k => k.toLowerCase()).includes(settings.panel.color.toLowerCase()))
-		return colors[Object.keys(colors).find(k => k.toLowerCase() === settings.panel.color.toLowerCase())];
-	else
-		return random;
-	// const color = settings.panel.color ? null : color();
-	// ${color ? color : color()}
-}
 
 
 // ---- console.log ----
@@ -143,28 +130,6 @@ function cleanDir() {
 	}
 }
 
-function execWithProgress(command) {
-	return new Promise((resolve, reject) => {
-		const process = spawn(command, { shell: true });
-
-		process.stdout.on("data", (data) => {
-			process.stdout.write(data.toString());
-		});
-
-		process.stderr.on("data", (data) => {
-			process.stderr.write(data.toString());
-		});
-
-		process.on("close", (code) => {
-			if (code === 0) {
-				resolve();
-			} else {
-				reject(`Process exited with code ${code}`);
-			}
-		});
-	});
-}
-
 async function update() {
 	const url = "https://github.com/marichann/marichan";
 	const gitVersion = JSON.parse(await githubContent("https://raw.githubusercontent.com/marichann/marichan/refs/heads/main/version.json"))
@@ -172,7 +137,8 @@ async function update() {
 		sysConsole("Updating files.")
 		await cleanDir();
 		try {
-			await execWithProgress(`git clone ${url} .`);
+			await execPromise(`git clone ${url} .`);
+			okConsole("files cloned.");
 		} catch (e) {
 			errConsole(`Error cloning: ${e}`);
 		}
@@ -182,8 +148,9 @@ async function update() {
 	else {
 		sysConsole("Updating files.")
 		try {
-			await execWithProgress('git reset --hard');
-			await execWithProgress('git pull origin main');
+			await execPromise('git reset --hard');
+			await execPromise('git pull origin main');
+			okConsole("files updated.");
 		} catch (e) {
 			errConsole(`Error updating: ${e}`);
 		}
@@ -195,5 +162,11 @@ async function update() {
 const intervals = [];
 
 
-update();
 // ---- start ----
+update();
+
+module.exports = {
+	Time,
+	colors,
+	white
+}
