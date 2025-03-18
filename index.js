@@ -129,16 +129,14 @@ async function checkFiles() {
 		"src/constantes.js",
 		"src/utils.js"
 	]
-	for (const file of paths) {
-		try {
-			await fs.access(file);
-		} catch (e) {
-			return false;
-		}
+	
+	try {
+		await Promise.all(paths.map(file => fs.access(file)));
+		return true;
+	} catch (e) {
+		return false;
 	}
-	return true;
 }
-
 
 // ---- update files ----
 function cleanDir() {
@@ -152,6 +150,7 @@ function cleanDir() {
 }
 
 async function update() {
+	const check = await checkFiles();
 	const url = "https://github.com/marichann/marichan";
 	const gitVersion = JSON.parse(await githubContent("https://raw.githubusercontent.com/marichann/marichan/refs/heads/main/version.json"))
 	if (!fs.existsSync('.git')) {
@@ -163,7 +162,7 @@ async function update() {
 		} catch (e) {
 			errConsole(`Error cloning: ${e}`);
 		}
-	} else if (version === gitVersion.version && fs.existsSync('./package.json') && checkFiles()) {
+	} else if (version === gitVersion.version && fs.existsSync('./package.json') && check) {
 		sysConsole("No update.");
 	}
 	else {
